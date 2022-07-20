@@ -11,41 +11,41 @@ export class  ProductController
     @Get()
     async getProducts()
     {
-      var resulsts=await this.productService.getProducts();
+      var resulsts= await this.productService.getProducts();
       return  resulsts;
     }
 
     @Get(":id")
-    getProduct(@Param("id") productId:string)
+    async getProduct(@Param("id") productId:string)
     {
-      return  this.productService.getProductById(Number(productId));
+      return await this.productService.getProductById(Number(productId));
     }
 
     @Delete(":id")
-    deleteProduct(@Param("id") productId:string)
+    async deleteProduct(@Param("id") productId:string)
     {
-      return  this.productService.deleteProduct(Number(productId));
+      return await this.productService.deleteProduct(Number(productId));
     }
 
     @Post()
-    createProduct( 
+    async createProduct( 
     @Body('title') prodTitle: string,
     @Body('description') prodDesc: string,
     @Body('price') prodPrice: number,
     @Body('quantity') prodQuantity: number,
     )
     {
-      return this.productService.createProduct(prodTitle,prodDesc,prodPrice,prodQuantity);
+      return await this.productService.createProduct(prodTitle,prodDesc);
     }
 
     @Put(":id")
-    updateProduct(
+   async updateProduct(
     @Param("id") productId:string,    
     @Body('title') prodTitle: string,
     @Body('description') prodDesc: string,
     @Body('price') prodPrice: number,
     @Body('quantity') prodQuantity: number,)
     {
-      this.productService.updateProduct(Number(productId),prodTitle,prodDesc,prodPrice,prodQuantity);
+       await this.productService.updateProduct(Number(productId),prodTitle,prodDesc);
     }
 }

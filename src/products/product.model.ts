@@ -1,5 +1,5 @@
-export class Product
+export class ProductDTO
 {
-    constructor(public id:Number,public title:string,public description:string,public price:Number,public quantity:Number) {}
+    constructor(public id:Number,public title:string,public description:string) {}
     
 }
