@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {Product as ProductEntity} from "./../products/product.entity"
+import { Category } from 'src/category/category.entity';
  
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import {Product as ProductEntity} from "./../products/product.entity"
         database: 'nestjs',//configService.get('POSTGRES_DB'),
         entities: [
          // __dirname + './../**/*.entity.ts',
-         ProductEntity
+         ProductEntity,
+         Category
         ],
         synchronize: true,
       })
