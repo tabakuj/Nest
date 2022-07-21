@@ -31,11 +31,10 @@ export class  ProductController
     async createProduct( 
     @Body('title') prodTitle: string,
     @Body('description') prodDesc: string,
-    @Body('price') prodPrice: number,
-    @Body('quantity') prodQuantity: number,
+    @Body('categoryId') categoryId: number
     )
     {
-      return await this.productService.createProduct(prodTitle,prodDesc);
+      return await this.productService.createProduct(prodTitle,prodDesc,categoryId);
     }
 
     @Put(":id")
@@ -43,9 +42,8 @@ export class  ProductController
     @Param("id") productId:string,    
     @Body('title') prodTitle: string,
     @Body('description') prodDesc: string,
-    @Body('price') prodPrice: number,
-    @Body('quantity') prodQuantity: number,)
+    @Body('categoryId') categoryId: number)
     {
-       await this.productService.updateProduct(Number(productId),prodTitle,prodDesc);
+       await this.productService.updateProduct(Number(productId),prodTitle,prodDesc,categoryId);
     }
 }

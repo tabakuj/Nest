@@ -3,12 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {Product as ProductEntity} from "./product.entity"
 import { Repository,Equal } from "typeorm";
 import { ProductDTO } from "./product.model";
+import { Category } from "src/category/category.entity";
 
 
 @Injectable()
 export class ProductSerive {
 
-    constructor(@InjectRepository(ProductEntity) private postRepository:Repository<ProductEntity>)
+    constructor(@InjectRepository(ProductEntity) private postRepository:Repository<ProductEntity>,@InjectRepository(Category) private categoryRepository:Repository<Category>)
     {}
 
     private data =  [new ProductDTO(1,"test","")];
@@ -29,21 +30,34 @@ export class ProductSerive {
        await this.postRepository.delete(prodId.toString());
     }
 
-    async createProduct(prodTitle:string, prodDescription:string):Promise<Number>
+    async createProduct(prodTitle:string, prodDescription:string,categoryId:Number):Promise<Number>
     {
+        var categoryModel= await this.LoadCategory(categoryId);
         var product= await this.postRepository.create({
             description:prodDescription,
-            title:prodTitle
+            title:prodTitle,
+            category:categoryModel
         });
         await this.postRepository.save(product);
         return product.id;
     }
 
-    async updateProduct(productId:Number,prodTitle:string, prodDescription:string):Promise<void>
+    async updateProduct(productId:Number,prodTitle:string, prodDescription:string,categoryId:Number):Promise<void>
     {
-      await   this.postRepository.update(productId.toString(),{title:prodTitle,description:prodDescription});
+        var categoryModel= await this.LoadCategory(categoryId);
+      await   this.postRepository.update(productId.toString(),{title:prodTitle,description:prodDescription,category:categoryModel});
     }
+    private async LoadCategory(categoryId: Number): Promise<Category> {
 
+        const category = await this.categoryRepository
+            .createQueryBuilder("category")
+            .where("category.id=:catid",{catid:categoryId})
+            .getOne();
+        if (!category) {
+          throw new NotFoundException('Could not find category.');
+        }
+        return category;
+      }
     private async findProduct(productId: Number): Promise<ProductEntity> {
 
         const product = await this.postRepository
